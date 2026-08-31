@@ -1,84 +1,144 @@
-import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:more_devs_do_zero/features/home/controllers/home_controller.dart';
-import 'package:more_devs_do_zero/features/home/models/category_model.dart';
-import 'package:more_devs_do_zero/features/login/controllers/login_controller.dart';
-import 'package:more_devs_do_zero/shared/app_text_style.dart';
-import 'package:more_devs_do_zero/shared/widgets/app_elevated_button.dart';
-import 'package:provider/provider.dart';
+import 'package:more_devs_do_zero/shared/mocks.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends StatelessWidget {
   const HomePage({super.key});
   static String route = '/home';
 
   @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      context.read<HomeController>().getCategories();
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Consumer<LoginController>(
-          builder: (context, loginController, child) {
-            return Text(
-              'Olá ${loginController.user!.nome}',
-              style: AppTextStyle.title,
-            );
-          },
-        ),
-      ),
-      body: Consumer<HomeController>(
-        builder: (context, homeController, child) {
-          return Column(
-            children: [
-              SizedBox(
-                child: switch (homeController.categoriesState) {
-                  CategoriesViewState.loading => Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                  CategoriesViewState.error => Text(
-                    'Problema ao resgatar categorias',
-                  ),
-                  CategoriesViewState.success => SizedBox(
-                    height: 150,
-                    child: ListView.builder(
-                      itemCount: homeController.categories.length,
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, index) {
-                        Category category = homeController.categories[index];
-                        return Container(
-                          margin: EdgeInsets.all(10),
-                          // height: 50,
-                          child: Column(
-                            children: [
-                              SizedBox(
-                                height: 76,
-                                child: Image.network(category.imageUrl),
-                              ),
-                              Text(category.name, style: AppTextStyle.title),
-                            ],
-                          ),
-                        );
-                      },
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: ListView(
+          padding: const EdgeInsets.all(16),
+          children: [
+            // HEADER
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text('Olá, {Usuário}', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                IconButton(onPressed: () {}, icon: const Icon(Icons.shopping_cart_outlined)),
+              ],
+            ),
+            const SizedBox(height: 16),
+
+            // BANNER
+            Container(
+              height: 130,
+              decoration: BoxDecoration(
+                color: const Color(0xFFE8EEF2),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Row(
+                children: [
+                  const Expanded(
+                    flex: 2,
+                    child: Padding(
+                      padding: EdgeInsets.all(16),
+                      child: Text('Aproveite as ofertas', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                     ),
                   ),
+                  Expanded(
+                    flex: 2,
+                    child: ClipRRect(
+                      borderRadius: const BorderRadius.horizontal(right: Radius.circular(12)),
+                      child: Image.network(
+                        'https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=400',
+                        height: 130, fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 24),
+
+            // CATEGORIAS
+            Row(
+              children: [
+                const Text('Categorias', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+                const SizedBox(width: 8),
+                Container(
+                  width: 20, height: 20,
+                  decoration: BoxDecoration(color: Colors.grey.shade200, shape: BoxShape.circle),
+                  child: const Icon(Icons.chevron_right, size: 16),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            SizedBox(
+              height: 90,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: categoriesJson.length,
+                itemBuilder: (c, i) {
+                  return Container(
+                    width: 75,
+                    margin: const EdgeInsets.only(right: 16),
+                    child: Column(
+                      children: [
+                        CircleAvatar(
+                          radius: 30,
+                          backgroundColor: const Color(0xFFF5F5F5),
+                          backgroundImage: NetworkImage(categoriesJson[i]['imageUrl']),
+                        ),
+                        const SizedBox(height: 6),
+                        Text(categoriesJson[i]['name'], style: const TextStyle(fontSize: 12)),
+                      ],
+                    ),
+                  );
                 },
               ),
-            ],
-          );
-        },
+            ),
+            const SizedBox(height: 16),
+
+            // PRODUTOS - IGUAL DA FOTO
+            Row(
+              children: [
+                const Text('Produtos', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+                const SizedBox(width: 8),
+                Container(
+                  width: 20, height: 20,
+                  decoration: BoxDecoration(color: Colors.grey.shade200, shape: BoxShape.circle),
+                  child: const Icon(Icons.chevron_right, size: 16),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            SizedBox(
+              height: 220,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: productsJson.length,
+                itemBuilder: (c, i) {
+                  final p = productsJson[i];
+                  return Container(
+                    width: 150,
+                    margin: const EdgeInsets.only(right: 16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(12),
+                          child: Image.network(
+                            p['imageUrl'],
+                            height: 130, width: 150, fit: BoxFit.cover,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(p['brand'], style: TextStyle(fontSize: 11, color: Colors.grey[600])),
+                        Text(p['name'], style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13)),
+                        Text('R\$ ${p['price']}', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
