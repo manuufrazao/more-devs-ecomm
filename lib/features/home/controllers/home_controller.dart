@@ -3,17 +3,26 @@ import 'package:more_devs_do_zero/features/home/models/category_model.dart';
 import 'package:more_devs_do_zero/shared/mocks.dart';
 
 enum CategoriesViewState { loading, success, error }
+enum ProductViewState { loading, sucess, error }
 
 class HomeController extends ChangeNotifier {
   List<Category> categories = [];
+List<Product> products = [];
+
+
+
 
   CategoriesViewState categoriesState = CategoriesViewState.loading;
-
+ProductViewState productViewState = ProductViewState.loading;
   void changeCategoriesState(CategoriesViewState state) {
     categoriesState = state;
     notifyListeners();
   }
 
+void changeProductsState(ProductViewState state) {
+    productViewState = state;
+    notifyListeners();
+  }
   Future<void> getCategories() async {
     changeCategoriesState(CategoriesViewState.loading);
     //simula o delay da API
@@ -27,6 +36,7 @@ class HomeController extends ChangeNotifier {
     } catch (e) {
       //caso der erro na deserialização, emite o erro para a tela tratar
       changeCategoriesState(CategoriesViewState.error);
+      
     }
   }
 }

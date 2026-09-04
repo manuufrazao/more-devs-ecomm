@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:more_devs_do_zero/shared/mocks.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -22,6 +23,10 @@ class HomePage extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 16),
+            AppBar(
+  title: const Text('Produtos'),
+
+),
 
             // BANNER
             Container(
@@ -80,7 +85,7 @@ class HomePage extends StatelessWidget {
                       children: [
                         CircleAvatar(
                           radius: 30,
-                          backgroundColor: const Color(0xFFF5F5F5),
+                          backgroundColor: const Color.fromARGB(255, 255, 208, 99),
                           backgroundImage: NetworkImage(categoriesJson[i]['imageUrl']),
                         ),
                         const SizedBox(height: 6),
@@ -93,7 +98,7 @@ class HomePage extends StatelessWidget {
             ),
             const SizedBox(height: 16),
 
-            // PRODUTOS - IGUAL DA FOTO
+        
             Row(
               children: [
                 const Text('Produtos', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
@@ -106,34 +111,38 @@ class HomePage extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 12),
-            SizedBox(
-              height: 220,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: productsJson.length,
-                itemBuilder: (c, i) {
-                  final p = productsJson[i];
-                  return Container(
-                    width: 150,
-                    margin: const EdgeInsets.only(right: 16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(12),
-                          child: Image.network(
-                            p['imageUrl'],
-                            height: 130, width: 150, fit: BoxFit.cover,
+            Skeletonizer(
+              enabled:true,
+              
+              child: SizedBox(
+                height: 220,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: productsJson.length,
+                  itemBuilder: (c, i) {
+                    final p = productsJson[i];
+                    return Container(
+                      width: 150,
+                      margin: const EdgeInsets.only(right: 16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(12),
+                            child: Image.network(
+                              p['imageUrl'],
+                              height: 130, width: 150, fit: BoxFit.cover,
+                            ),
                           ),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(p['brand'], style: TextStyle(fontSize: 11, color: Colors.grey[600])),
-                        Text(p['name'], style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13)),
-                        Text('R\$ ${p['price']}', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
-                      ],
-                    ),
-                  );
-                },
+                          const SizedBox(height: 8),
+                          Text(p['brand'], style: TextStyle(fontSize: 11, color: Colors.grey[600])),
+                          Text(p['name'], style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13)),
+                          Text('R\$ ${p['price']}', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+                        ],
+                      ),
+                    );
+                  },
+                ),
               ),
             ),
           ],
