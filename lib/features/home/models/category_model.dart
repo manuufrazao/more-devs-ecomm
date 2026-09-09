@@ -22,3 +22,4 @@ factory Product.fromJson(Map<String, dynamic> json) {
     return Product(name: json['name'], imageUrl: json['imageUrl'], brand: json['brand'],  price: json['price']);
     }
 }
+

@@ -40,3 +40,4 @@ void changeProductsState(ProductViewState state) {
     }
   }
 }
+

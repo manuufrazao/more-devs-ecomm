@@ -2,10 +2,24 @@
 import 'package:flutter/material.dart';
 import 'package:more_devs_do_zero/shared/mocks.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
   static String route = '/home';
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  final PageController _bannerController = PageController();
+
+  @override
+  void dispose() {
+    _bannerController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,38 +37,91 @@ class HomePage extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 16),
-            AppBar(
-  title: const Text('Produtos'),
 
-),
-
-            // BANNER
-            Container(
+            // BANNER COM 2 TELAS QUE ROLAM
+            SizedBox(
               height: 130,
-              decoration: BoxDecoration(
-                color: const Color(0xFFE8EEF2),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Row(
+              child: PageView(
+                controller: _bannerController,
                 children: [
-                  const Expanded(
-                    flex: 2,
-                    child: Padding(
-                      padding: EdgeInsets.all(16),
-                      child: Text('Aproveite as ofertas', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                  // PAGINA 1 - oferta original
+                  Container(
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFE8EEF2),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Row(
+                      children: [
+                        const Expanded(
+                          flex: 2,
+                          child: Padding(
+                            padding: EdgeInsets.all(16),
+                            child: Text('Aproveite as ofertas', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 2,
+                          child: ClipRRect(
+                            borderRadius: const BorderRadius.horizontal(right: Radius.circular(12)),
+                            child: Image.network(
+                              'https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=400',
+                              height: 130, fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  Expanded(
-                    flex: 2,
-                    child: ClipRRect(
-                      borderRadius: const BorderRadius.horizontal(right: Radius.circular(12)),
-                      child: Image.network(
-                        'https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=400',
-                        height: 130, fit: BoxFit.cover,
-                      ),
+                  // PAGINA 2 - COGUMELO
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Stack(
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(12),
+                          child: Image.network(
+                            'https://images.unsplash.com/photo-1459411621453-7b03977f4bfc?w=500',
+                            height: 130,
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        Container(
+                          height: 130,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            color: Colors.black.withOpacity(0.3),
+                          ),
+                        ),
+                        const Positioned(
+                          left: 16,
+                          top: 0,
+                          bottom: 0,
+                          child: Center(
+                            child: Text(
+                              'Experimente agora!',
+                              style: TextStyle(
+                                fontSize: 22,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
+              ),
+            ),
+            const SizedBox(height: 12),
+            Center(
+              child: SmoothPageIndicator(
+                controller: _bannerController,
+                count: 2,
+                effect: const WormEffect(dotHeight: 8, dotWidth: 8),
               ),
             ),
             const SizedBox(height: 24),
@@ -97,8 +164,6 @@ class HomePage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
-
-        
             Row(
               children: [
                 const Text('Produtos', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
@@ -112,8 +177,7 @@ class HomePage extends StatelessWidget {
             ),
             const SizedBox(height: 12),
             Skeletonizer(
-              enabled:true,
-              
+              enabled: true,
               child: SizedBox(
                 height: 220,
                 child: ListView.builder(
@@ -129,10 +193,7 @@ class HomePage extends StatelessWidget {
                         children: [
                           ClipRRect(
                             borderRadius: BorderRadius.circular(12),
-                            child: Image.network(
-                              p['imageUrl'],
-                              height: 130, width: 150, fit: BoxFit.cover,
-                            ),
+                            child: Image.network(p['imageUrl'], height: 130, width: 150, fit: BoxFit.cover),
                           ),
                           const SizedBox(height: 8),
                           Text(p['brand'], style: TextStyle(fontSize: 11, color: Colors.grey[600])),
