@@ -29,7 +29,6 @@ class _HomePageState extends State<HomePage> {
         child: ListView(
           padding: const EdgeInsets.all(16),
           children: [
-            // HEADER
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -38,13 +37,13 @@ class _HomePageState extends State<HomePage> {
             ),
             const SizedBox(height: 16),
 
-            // BANNER COM 2 TELAS QUE ROLAM
+            // BANNER COM 2 TELAS
             SizedBox(
               height: 130,
               child: PageView(
                 controller: _bannerController,
                 children: [
-                  // PAGINA 1 - oferta original
+                  // PAGINA 1
                   Container(
                     decoration: BoxDecoration(
                       color: const Color(0xFFE8EEF2),
@@ -72,41 +71,34 @@ class _HomePageState extends State<HomePage> {
                       ],
                     ),
                   ),
-                  // PAGINA 2 - COGUMELO
+                  // PAGINA 2 - IGUAL SEU FIGMA
                   Container(
+                    height: 130,
                     decoration: BoxDecoration(
+                      color: const Color(0xFFE8EEF2),
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child: Stack(
+                    child: Row(
                       children: [
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(12),
-                          child: Image.network(
-                            'https://images.unsplash.com/photo-1459411621453-7b03977f4bfc?w=500',
-                            height: 130,
-                            width: double.infinity,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                        Container(
-                          height: 130,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12),
-                            color: Colors.black.withOpacity(0.3),
-                          ),
-                        ),
-                        const Positioned(
-                          left: 16,
-                          top: 0,
-                          bottom: 0,
-                          child: Center(
+                        const Expanded(
+                          flex: 2,
+                          child: Padding(
+                            padding: EdgeInsets.all(16),
                             child: Text(
-                              'Experimente agora!',
-                              style: TextStyle(
-                                fontSize: 22,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
+                              'Experimente\nagora!',
+                              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 2,
+                          child: ClipRRect(
+                            borderRadius: const BorderRadius.horizontal(right: Radius.circular(12)),
+                            child: Image.asset(
+                              'assets/cogumelo.png', // <-- TROCA AQUI pro nome que tá no seu yaml
+                              height: 130,
+                              width: double.infinity,
+                              fit: BoxFit.cover,
                             ),
                           ),
                         ),
@@ -121,7 +113,7 @@ class _HomePageState extends State<HomePage> {
               child: SmoothPageIndicator(
                 controller: _bannerController,
                 count: 2,
-                effect: const WormEffect(dotHeight: 8, dotWidth: 8),
+                effect: const WormEffect(dotHeight: 8, dotWidth: 8, activeDotColor: Colors.black),
               ),
             ),
             const SizedBox(height: 24),
