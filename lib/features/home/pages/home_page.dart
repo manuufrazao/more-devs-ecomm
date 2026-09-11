@@ -3,28 +3,40 @@ import 'package:flutter/material.dart';
 import 'package:more_devs_do_zero/shared/mocks.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-
+ 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
   static String route = '/home';
-
+ 
   @override
   State<HomePage> createState() => _HomePageState();
 }
-
+ 
 class _HomePageState extends State<HomePage> {
   final PageController _bannerController = PageController();
-
+ 
   @override
   void dispose() {
     _bannerController.dispose();
     super.dispose();
   }
-
+ 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.shopping_cart_outlined, color: Colors.black),
+            onPressed: () {
+              // TODO: navegar pra tela do carrinho
+            },
+          ),
+        ],
+      ),
       body: SafeArea(
         child: ListView(
           padding: const EdgeInsets.all(16),
@@ -36,7 +48,7 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
             const SizedBox(height: 16),
-
+ 
             // BANNER COM 2 TELAS
             SizedBox(
               height: 130,
@@ -117,7 +129,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             const SizedBox(height: 24),
-
+ 
             // CATEGORIAS
             Row(
               children: [
