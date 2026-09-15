@@ -1,57 +1,59 @@
-import 'package:flutter/widgets.dart';
-import 'package:more_devs_do_zero/features/cart/models/cart_item_model.dart';
-import 'package:more_devs_do_zero/features/home/models/product_model.dart';
- 
+import 'package:flutter/foundation.dart';
+
+class Product {
+  final String name;
+  final double price;
+  final String imageUrl;
+  final String brand;
+  Product({required this.name, required this.price, required this.imageUrl, required this.brand});
+}
+
+class CarrinhoItem {
+  final Product product;
+  int quantity;
+  CarrinhoItem({required this.product, this.quantity = 1});
+}
+
 class CarrinhoController extends ChangeNotifier {
-  final List<CarrinhoItem> items = [];
- 
-  // quantidade total de itens (soma das quantidades, não da qtd de produtos diferentes)
-  int get itemCount {
-    return items.fold(0, (total, item) => total + item.quantity);
-  }
- 
-  // soma do preço de tudo que está no carrinho
-  double get total {
-    return items.fold(0, (total, item) => total + item.subtotal);
-  }
- 
-  void addProduct(Product product) {
-    // verifica se o produto já está no carrinho
-    final index = items.indexWhere((item) => item.product.name == product.name);
- 
+  List<CarrinhoItem> items = [];
+
+  void addProduct(dynamic productData) {
+    Product product;
+    if (productData is Map<String, dynamic>) {
+      product = Product(
+        name: productData['name']?? '',
+        price: (productData['price'] as num?)?.toDouble()?? 0.0,
+        imageUrl: productData['imageUrl']?? '',
+        brand: productData['brand']?? '',
+      );
+    } else if (productData is Product) {
+      product = productData;
+    } else {
+      return;
+    }
+    final index = items.indexWhere((i) => i.product.name == product.name);
     if (index >= 0) {
-      // já existe: só aumenta a quantidade
       items[index].quantity++;
     } else {
-      // não existe: adiciona um novo item com quantidade 1
       items.add(CarrinhoItem(product: product));
     }
- 
     notifyListeners();
   }
- 
-  void removeProduct(Product product) {
-    final index = items.indexWhere((item) => item.product.name == product.name);
- 
-    if (index >= 0) {
-      if (items[index].quantity > 1) {
-        // ainda tem mais de 1: só diminui a quantidade
-        items[index].quantity--;
-      } else {
-        // era o último: remove o item inteiro da lista
-        items.removeAt(index);
-      }
-      notifyListeners();
-    }
-  }
- 
-  void removeItemCompletely(Product product) {
-    items.removeWhere((item) => item.product.name == product.name);
-    notifyListeners();
-  }
- 
+
   void clear() {
     items.clear();
     notifyListeners();
+  }
+
+  int get itemCount {
+    int c = 0;
+    for (var i in items) { c += i.quantity; }
+    return c;
+  }
+
+  double get total {
+    double s = 0;
+    for (var i in items) { s += i.product.price * i.quantity; }
+    return s;
   }
 }
