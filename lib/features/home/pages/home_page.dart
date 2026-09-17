@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../shared/mocks.dart';
 import '../controllers/carrinho_controller.dart';
+import 'carrinho_page.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -44,8 +45,12 @@ class _HomePageState extends State<HomePage> {
               IconButton(
                 icon: const Icon(Icons.shopping_cart_outlined, color: Colors.black),
                 onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('${_carrinho.itemCount} itens - R\$ ${_carrinho.total.toStringAsFixed(2)}')),
+                  // AQUI MUDOU: agora abre a tela do carrinho
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => CarrinhoPage(carrinho: _carrinho),
+                    ),
                   );
                 },
               ),

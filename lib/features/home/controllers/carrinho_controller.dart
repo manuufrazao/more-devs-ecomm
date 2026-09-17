@@ -1,59 +1,51 @@
-import 'package:flutter/foundation.dart';
-
-class Product {
-  final String name;
-  final double price;
-  final String imageUrl;
-  final String brand;
-  Product({required this.name, required this.price, required this.imageUrl, required this.brand});
-}
-
-class CarrinhoItem {
-  final Product product;
-  int quantity;
-  CarrinhoItem({required this.product, this.quantity = 1});
-}
+import 'package:flutter/material.dart';
 
 class CarrinhoController extends ChangeNotifier {
-  List<CarrinhoItem> items = [];
+  final Map<String, Map<String, dynamic>> _itens = {};
 
-  void addProduct(dynamic productData) {
-    Product product;
-    if (productData is Map<String, dynamic>) {
-      product = Product(
-        name: productData['name']?? '',
-        price: (productData['price'] as num?)?.toDouble()?? 0.0,
-        imageUrl: productData['imageUrl']?? '',
-        brand: productData['brand']?? '',
-      );
-    } else if (productData is Product) {
-      product = productData;
+  Map<String, Map<String, dynamic>> get itens => _itens;
+  int get quantidadeTotal => _itens.values.fold(0, (s, e) => s + (e['quantidade'] as int));
+  int get itemCount => quantidadeTotal;
+  double get total => _itens.values.fold(0.0, (s, e) => s + 7.99 * (e['quantidade'] as int));
+
+  void addProduct(Map<String, dynamic> product) {
+    // BLINDAGEM: se não tiver id, usa o nome como id
+    final rawId = product['id']?? product['name'];
+    final id = rawId.toString();
+
+    if (_itens.containsKey(id)) {
+      incrementar(id);
     } else {
-      return;
+      _itens[id] = {
+        'id': id,
+        'name': (product['name']?? 'Produto').toString(),
+        'brand': (product['brand']?? 'Akatsu').toString(),
+        'image': (product['image']?? product['imageUrl']?? '').toString(),
+        'quantidade': 1,
+      };
+      notifyListeners();
     }
-    final index = items.indexWhere((i) => i.product.name == product.name);
-    if (index >= 0) {
-      items[index].quantity++;
-    } else {
-      items.add(CarrinhoItem(product: product));
+  }
+
+  void incrementar(String id) {
+    if (_itens.containsKey(id)) {
+      _itens[id]!['quantidade'] = (_itens[id]!['quantidade'] as int) + 1;
+      notifyListeners();
     }
+  }
+
+  void decrementar(String id) {
+    if (_itens.containsKey(id)) {
+      final qtd = _itens[id]!['quantidade'] as int;
+      if (qtd > 0) {
+        _itens[id]!['quantidade'] = qtd - 1;
+        notifyListeners();
+      }
+    }
+  }
+
+  void remover(String id) {
+    _itens.remove(id);
     notifyListeners();
-  }
-
-  void clear() {
-    items.clear();
-    notifyListeners();
-  }
-
-  int get itemCount {
-    int c = 0;
-    for (var i in items) { c += i.quantity; }
-    return c;
-  }
-
-  double get total {
-    double s = 0;
-    for (var i in items) { s += i.product.price * i.quantity; }
-    return s;
   }
 }
