@@ -1,5 +1,3 @@
-
-
 final List<Map<String, dynamic>> categoriesJson = [
   {
     'name': 'Frutas',
@@ -25,23 +23,27 @@ final List<Map<String, dynamic>> productsJson = [
     'name': 'Rabanete',
     'imageUrl': 'https://i.postimg.cc/8Pt82Qmf/Image-1.png',
     'price': 10.99,
+    'category': 'Verduras',
   },
   {
     'brand': 'Akatsu',
     'name': 'Acerola',
     'imageUrl': 'https://i.postimg.cc/BQMWr9B8/Image.png',
     'price': 7.99,
+    'category': 'Frutas',
   },
   {
     'brand': 'Natural da terra',
     'name': 'Cogumelo',
     'imageUrl': 'https://i.postimg.cc/RVP8P1vw/Image-2.png',
     'price': 12.19,
+    'category': 'Verduras',
   },
   {
     'brand': 'Natural da terra',
     'name': 'Banana',
     'imageUrl': 'https://i.postimg.cc/8Pt82Qmf/Image-1.png',
     'price': 5.99,
+    'category': 'Frutas',
   },
 ];

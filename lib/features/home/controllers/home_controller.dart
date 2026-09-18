@@ -12,6 +12,16 @@ class HomeController extends ChangeNotifier {
  
   CategoriesViewState categoriesState = CategoriesViewState.loading;
   ProductViewState productViewState = ProductViewState.loading;
+
+  // --- O QUE FALTAVA PRA FILTRAR ---
+  String _categoriaSelecionada = 'Todos';
+  String get categoriaSelecionada => _categoriaSelecionada;
+
+  // get que retorna só os produtos da categoria clicada
+  List<Product> get produtosFiltrados {
+    if (_categoriaSelecionada == 'Todos') return products;
+    return products.where((p) => p.category == _categoriaSelecionada).toList();
+  }
  
   void changeCategoriesState(CategoriesViewState state) {
     categoriesState = state;
@@ -22,10 +32,15 @@ class HomeController extends ChangeNotifier {
     productViewState = state;
     notifyListeners();
   }
+
+  // método do botão que você falou
+  void selecionarCategoria(String nome) {
+    _categoriaSelecionada = nome;
+    notifyListeners();
+  }
  
   Future<void> getCategories() async {
     changeCategoriesState(CategoriesViewState.loading);
-    //simula o delay da API
     await Future.delayed(Duration(seconds: 3));
     try {
       categories = categoriesJson.map((item) {
@@ -34,14 +49,12 @@ class HomeController extends ChangeNotifier {
  
       changeCategoriesState(CategoriesViewState.success);
     } catch (e) {
-      //caso der erro na deserialização, emite o erro para a tela tratar
       changeCategoriesState(CategoriesViewState.error);
     }
   }
  
   Future<void> getProduct() async {
     changeProductsState(ProductViewState.loading);
-    //simula o delay da API
     await Future.delayed(Duration(seconds: 3));
     try {
       products = productsJson.map((item) {
@@ -50,7 +63,6 @@ class HomeController extends ChangeNotifier {
  
       changeProductsState(ProductViewState.success);
     } catch (e) {
-      //caso der erro na deserialização, emite o erro para a tela tratar
       changeProductsState(ProductViewState.error);
     }
   }

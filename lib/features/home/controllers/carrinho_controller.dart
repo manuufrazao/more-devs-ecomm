@@ -9,7 +9,6 @@ class CarrinhoController extends ChangeNotifier {
   double get total => _itens.values.fold(0.0, (s, e) => s + 7.99 * (e['quantidade'] as int));
 
   void addProduct(Map<String, dynamic> product) {
-    // BLINDAGEM: se não tiver id, usa o nome como id
     final rawId = product['id']?? product['name'];
     final id = rawId.toString();
 
@@ -46,6 +45,12 @@ class CarrinhoController extends ChangeNotifier {
 
   void remover(String id) {
     _itens.remove(id);
+    notifyListeners();
+  }
+
+  // ESSE AQUI QUE FALTAVA PRA SUA TELA DE PAGAMENTO APARECER
+  void clear() {
+    _itens.clear();
     notifyListeners();
   }
 }
