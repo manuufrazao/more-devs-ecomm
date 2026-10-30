@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:more_devs_do_zero/features/signup/services/signup_service.dart';
 
 class SignupController {
   final RegExp _emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
 
+  SignupService signupService = SignupService();
   TextEditingController emailController = TextEditingController();
   TextEditingController nomeController = TextEditingController();
   TextEditingController senhaController = TextEditingController();
@@ -36,7 +38,13 @@ class SignupController {
   }
 
   Future<void> signUp() async {
-    await Future.delayed(Duration(seconds: 2));
+    signupService.signUp(
+      name: nomeController.text,
+      email: emailController.text,
+      senha: senhaController.text,
+      confirmarSenha: confirmarSenhaController.text,
+      termosDeUso: isActiveCheckBox,
+    );
   }
 
   String? validateEmail(String? value) {

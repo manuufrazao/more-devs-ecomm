@@ -109,19 +109,19 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(height: 16),
             const Text('Produtos', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
             const SizedBox(height: 12),
-            Skeletonizer(enabled: _homeController.productViewState == ProductViewState.loading, child: SizedBox(height: 220, child: ListView.builder(scrollDirection: Axis.horizontal, itemCount: _homeController.produtosFiltrados.length, itemBuilder: (c, i) {
-              final p = _homeController.produtosFiltrados[i];
-              return InkWell(
-                onTap: () => _abrirModalProduto({'name': p.name, 'imageUrl': p.imageUrl, 'brand': p.brand, 'price': p.price}),
-                child: Container(width: 150, margin: const EdgeInsets.only(right: 16), child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  ClipRRect(borderRadius: BorderRadius.circular(12), child: Image.network(p.imageUrl, height: 130, width: 150, fit: BoxFit.cover, headers: const {"User-Agent": "Mozilla/5.0"})),
-                  const SizedBox(height: 8),
-                  Text(p.brand, style: TextStyle(fontSize: 11, color: Colors.grey[600])),
-                  Text(p.name, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13)),
-                  Text('R\$ ${p.price}', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
-                ])),
-              );
-            }))),
+            // Skeletonizer(enabled: _homeController.productViewState == ProductViewState.loading, child: SizedBox(height: 220, child: ListView.builder(scrollDirection: Axis.horizontal, itemCount: _homeController.produtosFiltrados.length, itemBuilder: (c, i) {
+            //   final p = _homeController.produtosFiltrados[i];
+            //   return InkWell(
+            //     onTap: () => _abrirModalProduto({'name': p.name, 'imageUrl': p.imageUrl, 'brand': p.brand, 'price': p.price}),
+            //     child: Container(width: 150, margin: const EdgeInsets.only(right: 16), child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            //       ClipRRect(borderRadius: BorderRadius.circular(12), child: Image.network(p.imageUrl, height: 130, width: 150, fit: BoxFit.cover, headers: const {"User-Agent": "Mozilla/5.0"})),
+            //       const SizedBox(height: 8),
+            //       Text(p.brand, style: TextStyle(fontSize: 11, color: Colors.grey[600])),
+            //       Text(p.name, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13)),
+            //       Text('R\$ ${p.price}', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+            //     ])),
+            //   );
+            // }))),
           ]),
       ),
     );

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:more_devs_do_zero/features/login/model/auth_user.dart';
 import 'package:more_devs_do_zero/features/login/model/user.dart';
+import 'package:more_devs_do_zero/features/login/services/login_service.dart';
 import 'package:more_devs_do_zero/shared/exceptions/auth_exception.dart';
 
 class LoginController extends ChangeNotifier {
@@ -8,10 +10,11 @@ class LoginController extends ChangeNotifier {
   TextEditingController emailController = TextEditingController();
   TextEditingController senhaController = TextEditingController();
   final GlobalKey<FormState> key = GlobalKey<FormState>();
+  LoginService loginService = LoginService();
 
   bool isActiveCheckBox = false;
 
-  User? user;
+  LoginResponseModel? user;
 
   bool isLoading = false;
 
@@ -45,13 +48,10 @@ class LoginController extends ChangeNotifier {
   }
 
   Future<void> login() async {
-    //Simula chamada da API
-    await Future.delayed(const Duration(seconds: 2));
-    if (emailController.text.trim() != 'manufrzao15@gmail.com' ||
-        senhaController.text.trim() != '123456') {
-      throw AuthException('E-mail ou senha incorretos');
-    }
-    user = User(nome: 'Manuela', email: emailController.text);
+    user = await loginService.login(
+      email: emailController.text,
+      senha: senhaController.text,
+    );
   }
 
   String? validateEmail(String? value) {
